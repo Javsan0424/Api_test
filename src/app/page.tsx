@@ -1,30 +1,39 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./estilo.css";
+import { clear, error } from "console";
 
 export default function Home() {
-  const API_KEY = "aefbe7260c8b49de962132425250303"
+  const API_KEY = "aefbe7260c8b49de962132425250303";
   const API_URL = "http://api.weatherapi.com/v1/current.json";
 
-  const [city, setCity] = useState("");
-  const [weatherData, setWeatherData] = useState(null);
-  const [error, setError] = useState(null);
+  const [city,setCity] = useState("")
+  const [citydata,setData] = useState(null)
+  const [error, setError] = useState(null)
 
-  const fetchWeather = async (e) => {
-    e.preventDefault();
-    try {
+  const HandleSearch = async(event) => {
+    event.preventDefault();
+    try{
       const response = await fetch(`${API_URL}?key=${API_KEY}&q=${city}`);
-      if (!response.ok) {
-        throw new Error("City not found");
+      if(!response.ok){
+        setError("Error: City not found");
+        setData(null);
       }
-      const data = await response.json();
-      setWeatherData(data);
-      setError(null);
-    } catch (err) {
-      setError(err.message);
-      setWeatherData(null);
+      else{
+        setData(await response.json());
+        setError(null);
+      }
+    } catch(failed){
+      setError(failed.message); 
     }
-  };
+  }
+
+  useEffect(() => {
+    if(error){
+      const timer = setTimeout(() => setError(null), 3000);
+      return() => clearTimeout(timer);
+    } 
+  }, [error]);
 
   return (
     <div>
@@ -32,28 +41,31 @@ export default function Home() {
         <h1 className="header">Project with API</h1>
 
         <div>
-          <form onSubmit={fetchWeather} className="box">
-            <input
-              type="text"
-              className="search"
-              placeholder="Search a city"
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
-            />
+          <form className="box" onSubmit={HandleSearch}>
+            <input type="text" placeholder="Search City" className="search" value={city} onChange={(e) => setCity(e.target.value)}/>
           </form>
         </div>
 
-        {error && <p className="error">{error}</p>}
+    
 
-        {weatherData && (
-          <div className="weather-info">
-            <h2>{weatherData.location.name}</h2>
-            <p>{weatherData.current.condition.text}</p>
-            <p>Temperature: {weatherData.current.temp_c}°C</p>
-            <p>Humidity: {weatherData.current.humidity}%</p>
-            <p>Wind: {weatherData.current.wind_kph} km/h</p>
+        {!error && citydata && (
+          <div className="info_box">
+            <p>{city}</p>
+            <p>{citydata.current.temp_c}°C</p>
+            <p>{citydata.current.humidity}%</p>
+            <p>{citydata.current.wind_kph} km/h</p>
           </div>
         )}
+
+        {error && (
+          <div className="error_box" >
+            {error}
+          </div>
+        )}
+
+
+      
+       
       </main>
     </div>
   );

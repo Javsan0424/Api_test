@@ -26,3 +26,26 @@ main{
     background-color: white;
     border-radius: 25px;
 }
+
+
+.error_box{
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    height: 80;
+    width: 200px;
+    background-color: red;
+    padding: 20px;
+    border-radius: 15px;
+    
+}
+
+.info_box{
+    height: 200px;
+    width: 200px;
+    background-color: royalblue;
+    border-radius: 15px;
+    padding: 20px;
+    margin: 20px;
+    color: black
+}
