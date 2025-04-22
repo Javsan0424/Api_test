@@ -1,72 +1,55 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import WeatherCard from "./component/WeatherCard";
 import "./estilo.css";
 
-interface WeatherData {
-  temp_c: string;
-  humidity: string;
-  wind_kph: string;
-}
-
 export default function Home() {
-  const API_KEY = "aefbe7260c8b49de962132425250303";
-  const API_URL = "http://api.weatherapi.com/v1/current.json";
+  const [cityInput, setCityInput] = useState("");
+  const [cities, setCities] = useState<string[]>([]);
 
-  const [city, setCity] = useState("");
-  const [cityData, setData] = useState<WeatherData>({
-    temp_c: "",
-    humidity: "",
-    wind_kph: "",
-  });
-  const [error, setError] = useState<string | null>(null);
-
-  const handleSearch = async (event: React.FormEvent) => {
+  const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-
-    try {
-      const data = await fetch(`${API_URL}?key=${API_KEY}&q=${city}`).then((res) =>
-        res.json()
-      );
-      setData(data.current);
-    } catch (failed) {
-      setError(failed instanceof Error ? failed.message : "An error occurred");
+    if (cityInput.trim() && !cities.includes(cityInput.trim())) {
+      setCities([...cities, cityInput.trim()]);
+      setCityInput("");
     }
   };
 
-  useEffect(() => {
-    if (error) {
-      const timer = setTimeout(() => setError(null), 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [error]);
+  const handleDelete = (cityToDelete: string) => {
+    setCities(cities.filter(city => city !== cityToDelete));
+  };
 
   return (
     <div>
       <main>
-        <h1 className="header">Project with API</h1>
+        <h1 className="header">Weather Dashboard</h1>
 
         <div>
-          <form className="box" onSubmit={handleSearch}>
+          <form className="box" onSubmit={handleSubmit}>
             <input
               type="text"
               placeholder="Search City"
               className="search"
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
+              value={cityInput}
+              onChange={(e) => setCityInput(e.target.value)}
             />
+            <button type="submit" className="search-btn">Add City</button>
           </form>
         </div>
 
-        {!error && cityData && (
-          <div className="info_box">
-            <p>{city}</p>
-            <p>{cityData.temp_c}°C</p>
-            <p>{cityData.humidity}%</p>
-            <p>{cityData.wind_kph} km/h</p>
-          </div>
-        )}
-
-        {error && <div className="error_box">{error}</div>}
+        <div className="weather-cards-container">
+          {cities.length === 0 ? (
+            <div className="empty-state">Search for a city to see weather information</div>
+          ) : (
+            cities.map(city => (
+              <WeatherCard 
+                key={city} 
+                city={city} 
+                onDelete={() => handleDelete(city)} 
+              />
+            ))
+          )}
+        </div>
       </main>
     </div>
   );

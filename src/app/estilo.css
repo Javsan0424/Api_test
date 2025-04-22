@@ -1,51 +1,116 @@
-main{
-    background: black;
-    height: 100vh; 
-    width: 100%; 
-}
-
-.header{
-    text-align: center;
-    padding-top: 50px;
-    font-size: 30pt;
-    color: white;
-}
-
-.box {
-    display: flex;
-    align-items: center; 
-    justify-content: center;
-    height: 100px;
-    width: 100%; 
+/* Base styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
   }
-
-.search{
-    color: black;
-    font-size: 30px;
+  
+  .header {
     text-align: center;
+    color: #333;
+    margin: 20px 0;
+  }
+  
+  .box {
+    display: flex;
+    justify-content: center;
+    margin: 20px auto;
+    max-width: 500px;
+  }
+  
+  .search {
+    padding: 10px;
+    width: 70%;
+    border: 1px solid #ddd;
+    border-radius: 4px 0 0 4px;
+    font-size: 16px;
+  }
+  
+  .search-btn {
+    padding: 10px 15px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .search-btn:hover {
+    background-color: #45a049;
+  }
+  
+  .weather-cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .weather-card {
+    position: relative;
     background-color: white;
-    border-radius: 25px;
-}
-
-
-.error_box{
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    height: 80;
-    width: 200px;
-    background-color: red;
+    border-radius: 8px;
     padding: 20px;
-    border-radius: 15px;
-    
-}
-
-.info_box{
-    height: 200px;
-    width: 200px;
-    background-color: royalblue;
-    border-radius: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .delete-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #888;
+  }
+  
+  .delete-btn:hover {
+    color: #f44336;
+  }
+  
+  .weather-card h3 {
+    margin-top: 0;
+    color: #333;
+  }
+  
+  .weather-info p {
+    margin: 8px 0;
+    color: #555;
+  }
+  
+  .weather-condition {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .weather-condition img {
+    margin-right: 10px;
+  }
+  
+  .empty-state {
+    text-align: center;
+    color: #888;
+    font-style: italic;
+    grid-column: 1 / -1;
+    padding: 40px;
+  }
+  
+  .error {
+    color: #f44336;
+    background-color: #ffebee;
+    padding: 10px;
+    border-radius: 4px;
+    margin: 10px 0;
+  }
+  
+  .loading {
+    color: #2196F3;
+    text-align: center;
     padding: 20px;
-    margin: 20px;
-    color: black
-}
+  }
